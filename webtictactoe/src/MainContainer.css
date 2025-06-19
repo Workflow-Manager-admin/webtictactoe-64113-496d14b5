@@ -200,6 +200,43 @@
   }
 }
 
+.ttt-game-tabs {
+  display: flex;
+  gap: 0.4em;
+  justify-content: center;
+  align-items: center;
+  margin: 1.2em 0 0 0;
+}
+
+.ttt-tab-btn {
+  background: var(--ttt-header-bg);
+  color: var(--ttt-primary);
+  border: 2px solid var(--ttt-header-border);
+  font-weight: 600;
+  font-size: 1.02rem;
+  padding: 7px 22px;
+  margin-right: 0.3em;
+  border-radius: 22px 22px 0 0;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+}
+
+.ttt-tab-btn:last-child {
+  margin-right: 0;
+}
+.ttt-tab-btn:hover,
+.ttt-tab-btn:focus-visible {
+  color: var(--ttt-accent);
+}
+
+.ttt-tab-active, .ttt-tab-btn[aria-selected="true"] {
+  background: var(--ttt-primary);
+  color: #fff;
+  border-bottom: 2px solid var(--ttt-primary);
+  z-index: 2;
+}
+
+
 /* Accent focus styles for accessibility */
 .ttt-cell:focus-visible {
   outline: 3px solid var(--ttt-accent);

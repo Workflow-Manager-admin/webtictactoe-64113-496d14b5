@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import "./MainContainer.css";
+import SnakeAndLadder from "./SnakeAndLadder";
 
 /*
   PUBLIC_INTERFACE
-  MainContainer: Main UI container for the WebTicTacToe game.
+  MainContainer: Main UI container for the WebTicTacToe game AND Snake & Ladder.
   Features:
     - Responsive header and game board
     - Light theme with specific colors
+    - Game switcher for TicTacToe or SnakeAndLadder
     - Real-time update logic placeholder (move reflect instantly)
     - No authentication
 */
@@ -20,24 +22,44 @@ function getEmptyBoard() {
     .map(() => Array(BOARD_SIZE).fill(null));
 }
 
-// PUBLIC_INTERFACE
+/*
+ * MainContainer now supports switching between Tic Tac Toe and Snake & Ladder.
+ */
 function MainContainer() {
-  /**
-   * Main container state for the game.
-   * board      — 2D array of "X", "O", or null
-   * xIsNext    — Boolean: is it X's turn?
-   * winner     — null | "X" | "O" | "draw"
-   */
+  // Game selection state
+  const [selectedGame, setSelectedGame] = useState("tictactoe"); // "tictactoe" | "snl"
+
+  // Tic Tac Toe state (preserved when switching back)
   const [board, setBoard] = useState(getEmptyBoard());
   const [xIsNext, setXIsNext] = useState(true);
   const winner = calculateWinner(board);
-  
-  // Mock real-time update: handle cell click and propagate instantly.
+
+  // Game switcher UI
+  function renderGameTabs() {
+    return (
+      <nav className="ttt-game-tabs" role="tablist" aria-label="Game Switcher">
+        <button
+          className={`ttt-tab-btn${selectedGame === "tictactoe" ? " ttt-tab-active" : ""}`}
+          aria-selected={selectedGame === "tictactoe"}
+          onClick={() => setSelectedGame("tictactoe")}
+        >
+          Tic Tac Toe
+        </button>
+        <button
+          className={`ttt-tab-btn${selectedGame === "snl" ? " ttt-tab-active" : ""}`}
+          aria-selected={selectedGame === "snl"}
+          onClick={() => setSelectedGame("snl")}
+        >
+          Snake &amp; Ladder
+        </button>
+      </nav>
+    );
+  }
+
+  // --- TTT game logic (untouched)
   function handleCellClick(row, col) {
     if (board[row][col] || winner) return;
 
-    // Normally, emit move to backend/server here + await real-time update.
-    // For now, apply move "instantly".
     const boardCopy = board.map((rowArr) => rowArr.slice());
     boardCopy[row][col] = xIsNext ? "X" : "O";
     setBoard(boardCopy);
@@ -70,6 +92,41 @@ function MainContainer() {
     return `Next move: ${xIsNext ? "X" : "O"}`;
   }
 
+  function renderTicTacToeSection() {
+    return (
+      <section className="ttt-board-section">
+        <h1 className="ttt-title" data-testid="ttt-title">
+          Tic Tac Toe
+        </h1>
+        <div className="ttt-status" data-testid="ttt-status">
+          {renderStatus()}
+        </div>
+        <div className="ttt-board">
+          {board.map((rowArr, rowIdx) => (
+            <div className="ttt-board-row" key={`row-${rowIdx}`}>
+              {rowArr.map((_, colIdx) => (
+                <React.Fragment key={`cell-${rowIdx}-${colIdx}`}>
+                  {renderCell(rowIdx, colIdx)}
+                </React.Fragment>
+              ))}
+            </div>
+          ))}
+        </div>
+        <button
+          className="ttt-reset-btn"
+          onClick={handleReset}
+          data-testid="ttt-reset"
+        >
+          Reset Game
+        </button>
+        <div className="ttt-realtime-blurb" aria-label="real-time mock note">
+          <span style={{ color: "var(--ttt-accent)" }}>Realtime: </span>
+          Moves update instantly (real-time logic placeholder)
+        </div>
+      </section>
+    );
+  }
+
   return (
     <div className="ttt-app-container">
       <header className="ttt-header">
@@ -78,38 +135,13 @@ function MainContainer() {
         </div>
         <div className="ttt-header-accent" />
       </header>
-
       <main className="ttt-main">
-        <section className="ttt-board-section">
-          <h1 className="ttt-title" data-testid="ttt-title">
-            Tic Tac Toe
-          </h1>
-          <div className="ttt-status" data-testid="ttt-status">
-            {renderStatus()}
-          </div>
-          <div className="ttt-board">
-            {board.map((rowArr, rowIdx) => (
-              <div className="ttt-board-row" key={`row-${rowIdx}`}>
-                {rowArr.map((_, colIdx) => (
-                  <React.Fragment key={`cell-${rowIdx}-${colIdx}`}>
-                    {renderCell(rowIdx, colIdx)}
-                  </React.Fragment>
-                ))}
-              </div>
-            ))}
-          </div>
-          <button
-            className="ttt-reset-btn"
-            onClick={handleReset}
-            data-testid="ttt-reset"
-          >
-            Reset Game
-          </button>
-          <div className="ttt-realtime-blurb" aria-label="real-time mock note">
-            <span style={{ color: "var(--ttt-accent)" }}>Realtime: </span>
-            Moves update instantly (real-time logic placeholder)
-          </div>
-        </section>
+        {renderGameTabs()}
+        {selectedGame === "tictactoe" ? renderTicTacToeSection() : (
+          <section className="ttt-board-section" style={{ padding: 0, background: "unset", boxShadow: "unset" }}>
+            <SnakeAndLadder />
+          </section>
+        )}
       </main>
     </div>
   );
