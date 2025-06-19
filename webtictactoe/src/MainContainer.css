@@ -1,0 +1,208 @@
+:root {
+  --ttt-primary: #4caf50;
+  --ttt-secondary: #ffc107;
+  --ttt-accent: #2196f3;
+  --ttt-bg: #f9fafc;
+  --ttt-header-bg: #ffffff;
+  --ttt-header-border: #e4e4e4;
+  --ttt-title: #222;
+  --ttt-cell-bg: #fff;
+  --ttt-cell-x: var(--ttt-primary);
+  --ttt-cell-o: var(--ttt-accent);
+}
+
+.ttt-app-container {
+  min-height: 100vh;
+  background: var(--ttt-bg);
+  color: var(--ttt-title);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+}
+
+.ttt-header {
+  width: 100%;
+  background: var(--ttt-header-bg);
+  border-bottom: 2px solid var(--ttt-header-border);
+  padding: 0.85rem 2rem 0.75rem 2rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.ttt-header-logo {
+  font-weight: bold;
+  font-size: 1.35rem;
+  color: var(--ttt-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.5px;
+}
+
+.ttt-logo-symbol {
+  font-size: 1.5rem;
+  color: var(--ttt-accent);
+}
+
+.ttt-header-accent {
+  width: 42px;
+  height: 8px;
+  background: linear-gradient(90deg, var(--ttt-accent) 0%, var(--ttt-secondary) 100%);
+  border-radius: 5px;
+}
+
+.ttt-main {
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 38px;
+  padding-bottom: 36px;
+}
+
+.ttt-board-section {
+  background: white;
+  border-radius: 16px;
+  padding: 2.25rem 2.25rem 2rem 2.25rem;
+  box-shadow: 0 2px 24px rgba(66, 186, 150, 0.07), 0 1.5px 9px rgba(33,150,243, 0.06);
+  margin-top: 2rem;
+  min-width: 320px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.ttt-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.3rem;
+  color: var(--ttt-primary);
+}
+
+.ttt-status {
+  font-size: 1.13rem;
+  color: var(--ttt-accent);
+  min-height: 2.1rem;
+}
+
+.ttt-board {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 1.1rem 0 1.2rem 0;
+  width: 252px;
+}
+
+.ttt-board-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.ttt-cell {
+  width: 80px;
+  height: 80px;
+  background: var(--ttt-cell-bg);
+  border: 2.3px solid var(--ttt-primary);
+  font-size: 2.95rem;
+  font-weight: bold;
+  color: var(--ttt-cell-x);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition: background 0.16s, box-shadow 0.16s;
+  margin: 0;
+  padding: 0;
+  border-radius: 12px;
+}
+
+.ttt-cell:disabled {
+  background: #f3f3f3;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.ttt-cell:nth-child(2) {
+  margin-left: 12px;
+  margin-right: 12px;
+}
+.ttt-board-row:not(:last-child) .ttt-cell {
+  margin-bottom: 12px;
+}
+
+.ttt-cell:first-child,
+.ttt-cell:last-child {
+  /* Remove duplicate spacing on first and last */
+}
+
+.ttt-cell[data-content="O"],
+.ttt-cell:has(.O) {
+  color: var(--ttt-cell-o);
+}
+
+.ttt-reset-btn {
+  margin-top: 1.1rem;
+  background: var(--ttt-secondary);
+  color: #fff;
+  border: none;
+  padding: 11px 32px;
+  border-radius: 36px;
+  font-size: 1.02rem;
+  font-weight: 600;
+  box-shadow: 0 0.5px 5px rgba(255,193,7,0.07);
+  cursor: pointer;
+  transition: background 0.14s;
+  letter-spacing: 0.1px;
+}
+
+.ttt-reset-btn:hover {
+  background: #ffd740;
+}
+
+.ttt-realtime-blurb {
+  margin-top: 0.6rem;
+  font-size: 0.95rem;
+  color: #888;
+  font-style: italic;
+}
+
+@media (max-width: 550px) {
+  .ttt-header,
+  .ttt-board-section {
+    padding: 0.8rem;
+  }
+  .ttt-board-section {
+    min-width: 0;
+    width: 97vw;
+    padding: 1.1rem 0.3rem 1rem 0.3rem;
+  }
+  .ttt-board {
+    width: 96vw;
+    max-width: 315px;
+  }
+  .ttt-cell {
+    width: 32vw;
+    height: 32vw;
+    max-width: 78px;
+    max-height: 78px;
+    font-size: 2rem;
+  }
+}
+
+/* Accent focus styles for accessibility */
+.ttt-cell:focus-visible {
+  outline: 3px solid var(--ttt-accent);
+  z-index: 2;
+  position: relative;
+}
